@@ -20,7 +20,7 @@ function Render(ModelZero,Users, ControllerModel) {
 	delta_t = ourclock.getDelta();
 //	if(delta_t > 0.1) delta_t = 0.1;
 	
-	ReadInput(Users, ControllerModel);
+	ReadInput(Users, ControllerModel,ModelZero);
 	UpdateWorld(ModelZero, Users);
 	
 	//setTimeout( function() { requestAnimationFrame( render );}, 100 ); //debugging only

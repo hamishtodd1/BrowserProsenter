@@ -12,12 +12,14 @@ var Central_X_axis = new THREE.Vector3(1,0,0);
 var ourclock = new THREE.Clock( true );
 var delta_t = 0;
 var logged = 0;
-var debugging = 1;
+var debugging = 0;
+
+var socket = io();
 
 var Scene;
 var Camera; //this needn't be global
 
-var Master;
+var Master; //probably going to be static.
 
 var OurVREffect; //eh, no need for these to be global
 var OurVRControls;
@@ -30,9 +32,10 @@ if ( WEBVR.isLatestAvailable() === false ){
 }
 
 /*
- * Relatively simple thing to add that can be claimed as the beginnings of an integrated environment:
+ * Very simple thing to add that can be claimed as the beginnings of an integrated environment:
  * 	import pile of jpegs (which in powerpoint is just "save as") and display them on a pad.
  * but how to get them in?
+ * Could point at a folder and start downloads of "SlideX.JPG" for every value of X until you get an error
  */
 
 
