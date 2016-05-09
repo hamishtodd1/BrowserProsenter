@@ -9,7 +9,7 @@ var Central_Y_axis = new THREE.Vector3(0,1,0);
 var Central_X_axis = new THREE.Vector3(1,0,0);
 
 //-----Fundamental things
-var ourclock = new THREE.Clock( true );
+var ourclock = new THREE.Clock( true ); //.getElapsedTime ()
 var delta_t = 0;
 var logged = 0;
 var debugging = 0;
@@ -38,8 +38,18 @@ if ( WEBVR.isLatestAvailable() === false ){
  * Could point at a folder and start downloads of "SlideX.JPG" for every value of X until you get an error
  */
 
+/*
+ * give touch controls to people on phones. Could have a fun game about swatting flies
+ * People are unlikely to want to look up and down, so make it tank
+ * and arrow keys with laptop
+ * can use it to practice >;)
+ * Can the VRer control your pitch though?
+ */
 
-//next feature, "get in another object"?
+/*
+ * next feature, "get in another object"? Or get in any object at all
+ * GearVR: turn your head and the protein will stay where you're looking, this allows you to see it from every angle
+ */
 
 /*
  * Might be nice to have the video input, but only when you're looking at the audience. 
