@@ -4,7 +4,7 @@ function initVideo()
 	video = document.createElement( 'video' );
 	// video.id = 'video';
 	// video.type = ' video/ogg; codecs="theora, vorbis" ';
-	video.src = "sintel.ogv";
+	video.src = "sintel.ogv"; //http://hamishtodd1.github.io/
 	video.load(); // must call after setting/changing source
 	video.play();
 	
@@ -38,12 +38,6 @@ function initVideo()
 	Scene.add(movieScreen);
 }
 
-//function animate() 
-//{
-//    requestAnimationFrame( animate );
-//	render();		
-//	update();
-//}
 //
 //function update()
 //{
@@ -61,8 +55,5 @@ function initVideo()
 //	
 //	if ( keyboard.pressed("r") ) // rewind video
 //		video.currentTime = 0;
-//	
-//	controls.update();
-//	stats.update();
 //}
 

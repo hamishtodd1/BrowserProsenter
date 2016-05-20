@@ -1,4 +1,5 @@
-function handle_Connects_and_Disconnects(Users,ControllerModel,ModelZero)
+//including our own connect
+function handle_Connects_and_Disconnects(Users,ControllerModel,Models)
 {
 	if(Users.length < InputObject.UserData.length)
 	{		
@@ -16,13 +17,13 @@ function handle_Connects_and_Disconnects(Users,ControllerModel,ModelZero)
 			Users[i] = new User(
 					InputObject.UserData[i].Gripping, 		InputObject.UserData[i].ID,					ControllerModel,
 					InputObject.UserData[i].HandPosition,  	InputObject.UserData[i].HandQuaternion,
-					InputObject.UserData[i].CameraPosition,	InputObject.UserData[i].CameraQuaternion, 	CameraArgument);
+					InputObject.UserData[i].CameraPosition,	InputObject.UserData[i].CameraQuaternion, 	CameraArgument, i);
 			
 			Scene.add(Users[i].Controller);
 			Scene.add(Users[i].CameraObject);
 			
-			if(Master) //also emit state of every other object
-				socket.emit('ModelsReSync', {ModelPosition: ModelZero.position, ModelQuaternion:ModelZero.quaternion} );
+			if(Master)
+				EmitModelStates(Models); //also emit state of every other object
 		}
 	}
 
@@ -43,11 +44,38 @@ function handle_Connects_and_Disconnects(Users,ControllerModel,ModelZero)
 	}
 }
 
+function EmitModelStates(Models)
+{
+	var ModelPositions = Array(Models.length);
+	var ModelQuaternions = Array(Models.length);
+	for(var i = 0; i < Models.length; i++)
+	{
+		ModelPositions[i] = Models[i].position.clone();
+		ModelQuaternions[i] = Models[i].quaternion.clone();
+	}
+	socket.emit('ModelsReSync', {ModelPositions,ModelQuaternions});
+}
+
+//"constructor", though we don't expect to use it outside of handle_Connects_and_Disconnects
 function User(Gripping, ID, ControllerModel,
 		HandPosition,HandQuaternion,
-		CameraPosition,CameraQuaternion,CameraArgument)
+		CameraPosition,CameraQuaternion,CameraArgument, PositionInUserArray)
 {
-	var newUserColor = new THREE.Color(Math.random(),Math.random(),Math.random());
+	var newUserColorComponent;
+	if( Master )
+	{
+		if(PositionInUserArray)
+			newUserColorComponent = 1;
+		else
+			newUserColorComponent = 0;
+	}
+	else {
+		if(PositionInUserArray)
+			newUserColorComponent = 0;
+		else
+			newUserColorComponent = 1;
+	}
+	var newUserColor = new THREE.Color(newUserColorComponent,newUserColorComponent,newUserColorComponent);
 	
 	if( CameraArgument === "you need to make it" )
 	{
@@ -55,9 +83,10 @@ function User(Gripping, ID, ControllerModel,
 		
 		CameraRadius = 8;
 		
+		//aperture
 		this.CameraObject.add(new THREE.Mesh( 
-				new THREE.CylinderGeometry(CameraRadius, CameraRadius/2, 10, 4), 
-				new THREE.MeshBasicMaterial({color:0x000000}) ) );
+				new THREE.CylinderGeometry(CameraRadius / 2, CameraRadius/3, 4, 16, 1, true), 
+				new THREE.MeshBasicMaterial({color:0x888888}) ) );
 		
 		for(var i = 0; i < this.CameraObject.children[0].geometry.vertices.length; i++)
 		{
@@ -65,6 +94,7 @@ function User(Gripping, ID, ControllerModel,
 			this.CameraObject.children[0].geometry.vertices[i].y += CameraRadius; //really this should be deduced based on aperture
 			this.CameraObject.children[0].geometry.vertices[i].applyAxisAngle(Central_X_axis, -TAU / 4);
 		}
+		this.CameraObject.children[0].material.side = THREE.DoubleSide;
 		
 		this.CameraObject.add(new THREE.Mesh( 
 				new THREE.BoxGeometry(
@@ -74,6 +104,20 @@ function User(Gripping, ID, ControllerModel,
 						CameraRadius * Math.sqrt(2) ), 
 						new THREE.MeshBasicMaterial({}) ) );
 		this.CameraObject.children[1].material.color.copy(newUserColor);
+		
+		//red light
+		this.CameraObject.add(new THREE.Mesh( 
+				new THREE.CylinderGeometry(CameraRadius / 16, 0.001, 10, 4), 
+				new THREE.MeshBasicMaterial({color:0xff0000}) ) );
+		for(var i = 0; i < this.CameraObject.children[2].geometry.vertices.length; i++)
+		{
+			this.CameraObject.children[2].geometry.vertices[i].applyAxisAngle(Central_Y_axis, TAU / 8);
+			this.CameraObject.children[2].geometry.vertices[i].y += CameraRadius / 2 - 3;
+			this.CameraObject.children[2].geometry.vertices[i].x += CameraRadius / 2;
+			this.CameraObject.children[2].geometry.vertices[i].z += CameraRadius / 2;
+			this.CameraObject.children[2].geometry.vertices[i].applyAxisAngle(Central_X_axis, -TAU / 4);
+		}
+		
 	}
 	else {
 		this.CameraObject = CameraArgument;
@@ -84,7 +128,6 @@ function User(Gripping, ID, ControllerModel,
 	copyvec(this.CameraObject.position,CameraPosition);
 	copyquat(this.CameraObject.quaternion,CameraQuaternion);
 //	this.CameraObject.quaternion.copy(CameraQuaternion);
-	console.log(CameraQuaternion,CameraPosition)
 	
 	this.Controller = ControllerModel.clone();
 	this.Controller.material = ControllerModel.material.clone();
@@ -113,20 +156,16 @@ function GetInput()
 			//silly but temporary. When proper controls come along we will not update the first one at all here
 			if(Camera.uuid === this.CameraObject.uuid)
 			{
-				//heh, we could detatch and then reattach
 				//we change the camera position during the loop
-				Scene.update();
-				this.Controller.updateMatrixWorld();
-				Camera.updateMatrix();
-				Camera.updateMatrixWorld();
 				
-				var worldspacePosition = Camera.position.clone();
+				var worldspacePosition = new THREE.Vector3();
 				Camera.localToWorld(worldspacePosition);
-//				this.Controller.localToWorld(worldspacePosition);
-//				worldspacePosition.applyMatrix4(Camera.matrix);
+				
+				var worldspaceQuaternion = new THREE.Quaternion();
+				worldspaceQuaternion.setFromRotationMatrix(new THREE.Matrix4().extractRotation(Camera.matrixWorld));
 				
 				copyvec(  InputObject.UserData[i].CameraPosition,	worldspacePosition);
-				copyquat( InputObject.UserData[i].CameraQuaternion,	this.CameraObject.quaternion);
+				copyquat( InputObject.UserData[i].CameraQuaternion,	worldspaceQuaternion);
 			}
 			else
 			{

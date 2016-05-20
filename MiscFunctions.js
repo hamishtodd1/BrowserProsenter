@@ -27,3 +27,21 @@ function copyquat(copytoQuat, copyfromQuat){
 	copytoQuat._z = copyfromQuat._z;
 	copytoQuat._w = copyfromQuat._w;
 }
+
+//the rainbow would be nice
+function NumberToHexColor(ournum)
+{
+	console.log(ournum)
+	ournum *= 16777216;
+	ournum = Math.round(ournum);
+	
+	if(ournum > 16777215)
+		ournum = 16777215;
+	if(ournum < 0)
+		ournum = 0;
+	
+	var ourstring = ournum.toString(16);
+	console.log(ournum,ourstring)
+	ourstring = "0x" + ournum; //yeah dunno about this
+	return ournum;
+}

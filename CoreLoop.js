@@ -1,31 +1,32 @@
 //A live fish
 
-function UpdateWorld(ModelZero,Hands){
+function UpdateWorld(Models,Hands){
 	
-//	ModelZero.rotateOnAxis(Central_Y_axis, TAU / 60 / 16);
+//	Models[0].rotateOnAxis(Central_Y_axis, TAU / 60 / 16);
 
-	UpdateHands(ModelZero,Hands);
+	UpdateHands(Models,Hands);
 	
-	ModelZero.children[0].BoundingBoxAppearance.update(ModelZero);
+	for(var i = 0; i < Models.length; i++)
+		Models[i].children[0].BoundingBoxAppearance.update(Models[i]);
 	
-//	if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
-//	{
-//		videoImageContext.drawImage( video, 0, 0 );
-//		if ( videoTexture ) 
-//			videoTexture.needsUpdate = true;
-//	}
+	if( typeof video !== 'undefined' && video.readyState === video.HAVE_ENOUGH_DATA)
+	{
+		videoImageContext.drawImage( video, 0, 0 );
+		if ( videoTexture ) 
+			videoTexture.needsUpdate = true;
+	}
 }
 
-function Render(ModelZero,Users, ControllerModel) {
+function Render(Models,Users, ControllerModel) {
 	delta_t = ourclock.getDelta();
 //	if(delta_t > 0.1) delta_t = 0.1;
 	
-	ReadInput(Users, ControllerModel,ModelZero);
-	UpdateWorld(ModelZero, Users);
+	ReadInput(Users, ControllerModel,Models);
+	UpdateWorld(Models, Users);
 	
 	//setTimeout( function() { requestAnimationFrame( render );}, 100 ); //debugging only
 	requestAnimationFrame( function(){
-		Render(ModelZero,Users,ControllerModel);
+		Render(Models,Users,ControllerModel);
 	} );
 	OurVREffect.render( Scene, Camera );
 }

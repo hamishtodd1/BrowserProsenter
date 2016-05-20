@@ -37,8 +37,7 @@ socket.on('OnConnect_Message', function(msg)
 	 * StarVR: 210
 	 * 
 	 */
-	OurVRControls = new THREE.VRControls( Camera );
-	OurVREffect = new THREE.VREffect( Renderer );
+	
 	
 	if ( WEBVR.isAvailable() === true )
 		document.body.appendChild( WEBVR.getButton( OurVREffect ) );
@@ -73,9 +72,13 @@ socket.on('OnConnect_Message', function(msg)
 		ID: msg.ID
 	});
 	
+	//you can add other things to this
 	var PreInitChecklist = {
 		Downloads: Array()
 	};
+	
+//	OurVRControls = new THREE.VRControls( Camera,Renderer.domElement );
+	OurVREffect = new THREE.VREffect( Renderer, Renderer.domElement );
 	
 	Download_initial_stuff(PreInitChecklist);
 });
@@ -89,24 +92,16 @@ function AttemptFinalInit(OurLoadedThings,PreInitChecklist){
 }
 
 function FinalInit(OurLoadedThings)
-{
-	var ModelZero = OurLoadedThings[0];
-	var ControllerModel = OurLoadedThings[1].children[1];
-	
-	Scene.add(ModelZero);
-	
-	ModelZero.children[0].BoundingBoxAppearance = new THREE.BoxHelper(ModelZero.children[0]);
-	Scene.add( ModelZero.children[0].BoundingBoxAppearance );
-	if(debugging)
-		ModelZero.children[0].BoundingBoxAppearance.visible = true;
-	else
-		ModelZero.children[0].BoundingBoxAppearance.visible = false;
+{		 
+	var ControllerModel = OurLoadedThings[0].children[1];
 	
 	for(var i = 0; i < ControllerModel.geometry.attributes.position.array.length; i++)
 		ControllerModel.geometry.attributes.position.array[i] *= 50;
 	
+	var Models = Array();
+	Loadpdb("1L2Y", Models);
+	
 	var Users = Array();
 	
-	Render(ModelZero,Users, ControllerModel);
+	Render(Models, Users, ControllerModel);
 }
-

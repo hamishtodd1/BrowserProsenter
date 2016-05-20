@@ -8,28 +8,59 @@ var Central_Z_axis = new THREE.Vector3(0,0,1); //also used as a placeholder norm
 var Central_Y_axis = new THREE.Vector3(0,1,0);
 var Central_X_axis = new THREE.Vector3(1,0,0);
 
-//-----Fundamental things
+//-----Fundamental
 var ourclock = new THREE.Clock( true ); //.getElapsedTime ()
 var delta_t = 0;
 var logged = 0;
 var debugging = 0;
 
+//Static. At least in some sense.
 var socket = io();
 
+var gentilis;
+
 var Scene;
-var Camera; //this needn't be global
+var Camera;
 
-var Master; //probably going to be static.
+var Master;
 
-var OurVREffect; //eh, no need for these to be global
+var OurVREffect;
 var OurVRControls;
 
+var OurPDBLoader = new THREE.PDBLoader(); //or are you supposed to create these on the fly?
+var OurOBJLoader = new THREE.OBJLoader();
+
 var VRMode = 1;
+
+var video;
+var videoTexture;
+var videoImageContext;
 
 if ( WEBVR.isLatestAvailable() === false ){
 	VRMODE = 0;
 //	document.body.appendChild( WEBVR.getMessage() );
 }
+
+//We have a "protein of interest" that the non-VR folks are looking at. When the VRer picks up a new one, their focus snaps to that
+
+/*
+ * When you twist an AA, a ramachandran plot should appear
+ * Does the whole donut spin or does it turn inside out?
+ */
+
+/*
+ * Question for mr molecular simulation: can you have a readout of the current stresses on the protein? Can that be done in realtime?
+ */
+
+/*
+ * GearVR: turn your head and the protein will stay where you're looking, this allows you to see it from every angle
+ * maybe only follow them if you're the master?
+ * Or maybe don't move the protein, move them. Too jarring? You probably won't have multiple rotation-tracking-only users.
+ */
+
+/*
+ * In advance of symposium, see about and calibrate the sensors for you standing in front of your laptop
+ */
 
 /*
  * Very simple thing to add that can be claimed as the beginnings of an integrated environment:
@@ -39,20 +70,22 @@ if ( WEBVR.isLatestAvailable() === false ){
  */
 
 /*
+ * there should be a texture with the link of the page on it.
+ * You should try and get a super short url, then think of an acronym to go with it. 
+ * If it involves a B or M can turn it to biomolecule
+ */
+
+/*
  * give touch controls to people on phones. Could have a fun game about swatting flies
- * People are unlikely to want to look up and down, so make it tank
- * and arrow keys with laptop
- * can use it to practice >;)
+ * They're on the surface of a sphere. Normal rotation.
+ * can use it to practice code for VALC >;)
  * Can the VRer control your pitch though?
  */
 
-/*
- * next feature, "get in another object"? Or get in any object at all
- * GearVR: turn your head and the protein will stay where you're looking, this allows you to see it from every angle
- */
+
 
 /*
- * Might be nice to have the video input, but only when you're looking at the audience. 
+ * Might be nice to have the Vive's video input, but only when you're looking at the audience. 
  * Like there's a sort of window just behind the camera
  */
 
@@ -65,8 +98,6 @@ if ( WEBVR.isLatestAvailable() === false ){
  * 
  * For now, just use the one server
  */
-
-//iff you're not receiving input from a head, your camera should be something that others can pick up and move around
 
 /*
  * You probably want to make it so people can upload their own. That creates a lobby and gives a tinyurl

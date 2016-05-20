@@ -1,4 +1,4 @@
-function UpdateHands(ModelZero,Users)
+function UpdateHands(Models,Users)
 {	
 	//aesthetic stuff
 	if(Users[0].Controller.Gripping){
@@ -18,50 +18,46 @@ function UpdateHands(ModelZero,Users)
 	for(var i = 0; i < Users.length; i++){
 		if(Users[i].Gripping)
 		{
+			for(var j = 0; j < Models.length; j++)
 			if( point_in_BoxHelper(Users[i].Controller.position,
-					ModelZero.children[0].BoundingBoxAppearance.geometry.attributes.position.array) )
+					Models[j].children[0].BoundingBoxAppearance.geometry.attributes.position.array) )
 			{
-				var alreadyholdingthisobject = 0;
-				for(var j = 0; j < Users[i].Controller.children.length; j++){
-					if(Users[i].Controller.children[j].uuid === ModelZero.uuid)
-						alreadyholdingthisobject = 1;
-				}
-				
-				if(!alreadyholdingthisobject)
-				{
-					Users[i].Controller.updateMatrixWorld();
-					THREE.SceneUtils.attach(ModelZero, Scene, Users[i].Controller);
-				}
+				AttemptPickup(Users[i].Controller, Models[j]);
 			}
 			
 			//i > 0 because it's hard to think of a situation in which you want to hold your own camera
-			if( i > 0 && Users[i].Controller.position.distanceTo( Camera.position ) < 30.4 )
+			//note that no camera other than our own is picked up. The models are just that - models
+			if( i > 0 && Users[i].Controller.position.distanceTo( Camera.position ) < 10 )
 			{
-				var alreadyholdingthisobject = 0;
-				for(var j = 0; j < Users[i].Controller.children.length; j++)
-				{
-					if(Users[i].Controller.children[j].uuid === Camera.uuid)
-						alreadyholdingthisobject = 1;
-				}
-				
-				if(!alreadyholdingthisobject)
-				{
-					Users[i].Controller.updateMatrixWorld();
-					THREE.SceneUtils.attach(Camera, Scene, Users[i].Controller);
-				}
+				//TODO iff you're not receiving input from a head tracker
+				AttemptPickup(Users[i].Controller, Camera);
+				//don't be surprised if this causes the camera to turn 45 degrees, you just have work to do
+				//there is a good argument for allowing you multiple things in your hands, what if there's many cameras?
 			}
 		}
 		else{
 			Users[i].Controller.updateMatrixWorld();
-			for(var j = 0; j < Users[i].Controller.children.length; j++){
-//				Users[i].Controller.children[j].updateMatrix();
-				//could you be doing something funny elsewhere with camera? YEOP
-				//could it be that picking it up should be triggering some matrix thing and that's failing to happen?
+			for(var j = 0; j < Users[i].Controller.children.length; j++)
+			{
 				Users[i].Controller.children[j].updateMatrixWorld();
 				THREE.SceneUtils.detach(Users[i].Controller.children[j], Users[i].Controller, Scene);
-				console.log(Camera.position, Camera.quaternion)
 			}
 		}
+	}
+}
+
+function AttemptPickup(UserController, GrabbableObject)
+{
+	var alreadyholdingthisobject = 0;
+	for(var j = 0; j < UserController.children.length; j++){
+		if(UserController.children[j].uuid === GrabbableObject.uuid)
+			alreadyholdingthisobject = 1;
+	}
+	
+	if(!alreadyholdingthisobject)
+	{
+		UserController.updateMatrixWorld();
+		THREE.SceneUtils.attach(GrabbableObject, Scene, UserController);
 	}
 }
 
