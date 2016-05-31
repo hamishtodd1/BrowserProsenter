@@ -153,7 +153,7 @@ function GetInput()
 	for(var i = 0; i < InputObject.UserData.length; i++ ) {
 		if(InputObject.UserData[i].ID === this.ID)
 		{
-			//silly but temporary. When proper controls come along we will not update the first one at all here
+			//should we be updating at all here?
 			if(Camera.uuid === this.CameraObject.uuid)
 			{
 				//we change the camera position during the loop
@@ -166,16 +166,53 @@ function GetInput()
 				
 				copyvec(  InputObject.UserData[i].CameraPosition,	worldspacePosition);
 				copyquat( InputObject.UserData[i].CameraQuaternion,	worldspaceQuaternion);
+				
+				var gamepads = navigator.getGamepads();
+				
+				for(var i = 0; i < gamepads.length; ++i)
+				{					
+					if (gamepads[i] && gamepads[i].pose) //because some are undefined
+					{
+						console.log(gamepads[i].pose.orientation);
+						
+						this.Controller.position.x = gamepads[i].pose.position[0];
+						this.Controller.position.y = gamepads[i].pose.position[1];
+						this.Controller.position.z = gamepads[i].pose.position[2];
+						//assuming it's a quaternion
+						this.Controller.quaternion.x = gamepads[i].pose.orientation[0];
+						this.Controller.quaternion.y = gamepads[i].pose.orientation[1];
+						this.Controller.quaternion.z = gamepads[i].pose.orientation[2];
+						this.Controller.quaternion.w = gamepads[i].pose.orientation[3];
+//						copyquat( this.Controller.quaternion,	gamepads[i].pose.orientation );
+						
+					      
+						//a very primitive way to work out grippingness. If any button on any gamepad is pushed.
+						for (var j = 0; j < gamepads[i].buttons.length; ++j)
+						{
+							if (gamepads[i].buttons[j].pressed)
+							{
+								this.Gripping = 1;
+								break;
+							}
+							
+							if( j === gamepads[i].buttons.length - 1)
+								this.Gripping = 0;
+						}
+					}
+				}
+				
+				//WE ARE NO LONGER HAVING AN INPUTOBJECT FOR OUR OWN HAND POSITION
 			}
 			else
 			{
 				copyvec(  this.CameraObject.position,	InputObject.UserData[i].CameraPosition );
 				copyquat( this.CameraObject.quaternion,	InputObject.UserData[i].CameraQuaternion );
+				
+				copyvec( this.Controller.position,		InputObject.UserData[i].HandPosition);
+				copyquat(this.Controller.quaternion, 	InputObject.UserData[i].HandQuaternion);
+				
+				this.Gripping = InputObject.UserData[i].Gripping;
 			}
-			
-			copyvec( this.Controller.position,		InputObject.UserData[i].HandPosition);
-			copyquat(this.Controller.quaternion, 	InputObject.UserData[i].HandQuaternion);	
-			this.Gripping = InputObject.UserData[i].Gripping;
 			
 			this.Controller.updateMatrixWorld();
 			

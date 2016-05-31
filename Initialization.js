@@ -1,3 +1,4 @@
+//the first init
 socket.on('OnConnect_Message', function(msg)
 {
 	Master = msg.Master;
@@ -105,7 +106,7 @@ function PostDownloadInit(OurLoadedThings)
 //		object.scale.multiplyScalar(0.5);
 	
 	var Models = Array();
-	Loadpdb("1L2Y", Models);
+	Loadpdb("4ins", Models);
 	
 	var Users = Array();
 	

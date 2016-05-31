@@ -57,8 +57,6 @@ THREE.VREffect = function ( renderer, onError ) {
 
 	}
 
-	//
-
 	this.scale = 1;
 
 	this.setSize = function ( width, height ) {
@@ -93,7 +91,7 @@ THREE.VREffect = function ( renderer, onError ) {
 	this.setFullScreen = function ( boolean ) {
 
 		return new Promise( function ( resolve, reject ) {
-
+			
 			if ( vrHMD === undefined ) {
 
 				reject( new Error( 'No VR hardware found.' ) );

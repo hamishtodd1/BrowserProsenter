@@ -12,7 +12,7 @@ var Central_X_axis = new THREE.Vector3(1,0,0);
 var ourclock = new THREE.Clock( true ); //.getElapsedTime ()
 var delta_t = 0;
 var logged = 0;
-var debugging = 1;
+var debugging = 0;
 
 //Static. At least in some sense.
 var socket = io();

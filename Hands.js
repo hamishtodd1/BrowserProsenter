@@ -14,10 +14,9 @@ function UpdateHands(Models,Users)
 	//Note this does introduce minor disagreement - for the person whose controller it is, they're not holding that camera.
 	
 	
-	
 	for(var i = 0; i < Users.length; i++){
 		if(Users[i].Gripping)
-		{
+		{			
 			for(var j = 0; j < Models.length; j++)
 			if( point_in_BoxHelper(Users[i].Controller.position,
 					Models[j].children[0].BoundingBoxAppearance.geometry.attributes.position.array) )
