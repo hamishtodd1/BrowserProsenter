@@ -163,6 +163,8 @@ THREE.VREffect = function ( renderer, onError ) {
 
 	var cameraR = new THREE.PerspectiveCamera();
 	cameraR.layers.enable( 2 );
+	
+	cameraL.position.set()
 
 	this.render = function ( scene, camera ) {
 

@@ -3,7 +3,7 @@
  * @author mrdoob / http://mrdoob.com
  */
 
-THREE.VRControls = function ( object, onError ) {
+THREE.VRControls = function ( object, onError ) { //object is the camera
 
 	var scope = this;
 

@@ -69,7 +69,6 @@ var WEBVR = {
 	},
 
 	getButton: function ( effect ) {
-
 		var button = document.createElement( 'button' );
 		button.style.position = 'absolute';
 		button.style.left = 'calc(50% - 30px)';
@@ -83,11 +82,9 @@ var WEBVR = {
 		button.style.fontSize = '13px';
 		button.style.fontStyle = 'normal';
 		button.style.zIndex = '999';
-		button.textContent = 'ENTER VR';
+		button.textContent = 'CLICK THIS OR PRESS . TO ENTER VR';
 		button.onclick = function() {
-
 			effect.setFullScreen( true );
-
 		};
 
 		return button;

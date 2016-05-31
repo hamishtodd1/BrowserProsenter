@@ -28,5 +28,5 @@ function Render(Models,Users, ControllerModel) {
 	requestAnimationFrame( function(){
 		Render(Models,Users,ControllerModel);
 	} );
-	OurVREffect.render( Scene, Camera );
+	OurVREffect.render( Scene, Camera ); //is it using that camera?
 }

@@ -12,14 +12,28 @@ var InputObject = { //only allowed to use this in this file and maybe in initial
 	clientY: 0
 };
 
+function UpdateVRCameraPosition()
+{
+	var oldCameraPosition = Camera.position.clone();
+	OurVRControls.update();
+	if(!Camera.position.equals(oldCameraPosition))
+	{
+		//if that changed anything, we need to process it
+		console.log("yesss")
+		Camera.position.add(INITIAL_CAMERA_POSITION);
+	}
+}
+
 function ReadInput(Users, ControllerModel,Models)
 {
 	//eventually this will do everything that the mouse event listeners and the first "User.getinput" currently does
-//	OurVRControls.update();
+	if(VRMODE)
+		UpdateVRCameraPosition();
 	
 	handle_Connects_and_Disconnects(Users,ControllerModel,Models);
 	
 	//orbit stuff. GearVR stuff will be very comparable
+	if(!VRMODE)
 	{
 		var FocussedModelPosition = new THREE.Vector3();
 		
@@ -87,22 +101,18 @@ function ReadInput(Users, ControllerModel,Models)
 	socket.emit('UserStateUpdate', InputObject.UserData[0] ); //we could emit it with every control change?
 }
 
-//keyboard crap
+//keyboard crap. Currently using "preventdefault" then "return" on everything you use, there's probably a better way
 document.addEventListener( 'keydown', function(event)
-{
-	if(event.keyCode !== 74)
-	event.preventDefault(); //what if it's j as in ctrl+shift+j?
-	
-	//might come in handy
-//	if( 37 <= event.keyCode && event.keyCode <= 40)
-//	{
-//		//going to use orbit controls, otherwise we lost the sense of orientation
-//		/*
-//		 * when mouse goes down, your z goes up
-//		 * when mouse goes to the left, you go around to the right
-//		 */
-//		
-//		
+{	
+	//arrow keys
+	if( 37 <= event.keyCode && event.keyCode <= 40)
+	{
+//		if(event.keyCode === 38)
+//			Scene.scale.multiplyScalar(0.5);
+//		if(event.keyCode === 40)
+//			Scene.scale.multiplyScalar(2);
+		
+		//tank controls
 //		var movingspeed = 0.8;
 //		var turningspeed = 0.05;
 //		
@@ -117,12 +127,29 @@ document.addEventListener( 'keydown', function(event)
 //			Camera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(Central_Y_axis,-turningspeed));
 //		if(event.keyCode === 40)
 //			Camera.position.sub(forwardvector);
-//	}
+//		return;
+	}
+	
+	if(event.keyCode === 190 )
+	{
+		event.preventDefault();
+		VRMODE = 1; //once you're in I guess you're not coming out!
+		OurVREffect.setFullScreen( true );
+		return;
+	}
 	
 	if(event.keyCode === 13) //enter
+	{
+		event.preventDefault();
 		InputObject.UserPressedEnter = 1;
+		return;
+	}
 	if(event.keyCode === 8) //backspace
+	{
+		event.preventDefault();
 		ChangeUserString( InputObject.UserString.slice(0, InputObject.UserString.length - 1) );
+		return;
+	}
 	
 	//symbols
 	{
@@ -135,7 +162,9 @@ document.addEventListener( 'keydown', function(event)
 		
 		if(typeof arrayposition != 'undefined')
 		{
+			event.preventDefault();
 			ChangeUserString(InputObject.UserString + keycodeArray[arrayposition]);
+			return;
 		}
 	}
 	

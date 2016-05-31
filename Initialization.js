@@ -39,19 +39,18 @@ socket.on('OnConnect_Message', function(msg)
 	 */
 	
 	
-	if ( WEBVR.isAvailable() === true )
-		document.body.appendChild( WEBVR.getButton( OurVREffect ) );
+	
 	
 	document.body.appendChild( Renderer.domElement );
 	
 	Scene = new THREE.Scene();
 	
 	//Camera will be added to the scene when the user is set up
-	Camera = new THREE.PerspectiveCamera( 70, //VERTICAL_FOV_VIVE, //mrdoob says 70
+	Camera = new THREE.PerspectiveCamera( 70, //VERTICAL_FOV_VIVE, //mrdoob says 70. They seem to change it anyway...
 			Renderer.domElement.width / Renderer.domElement.height, //window.innerWidth / window.innerHeight,
 			0.001, 700);
 	
-	Camera.position.set(0,0,30); //initial state subject to change! you may not want them on the floor. Owlchemy talked about this
+	Camera.position.copy(INITIAL_CAMERA_POSITION); //initial state subject to change! you may not want them on the floor. Owlchemy talked about this
 	var fireplaceangle = msg.Master ? 0 : Math.PI; //called so because they're seated around it
 	Camera.position.applyAxisAngle(Central_Y_axis,fireplaceangle);
 	Camera.lookAt(new THREE.Vector3());
@@ -77,8 +76,13 @@ socket.on('OnConnect_Message', function(msg)
 		Downloads: Array()
 	};
 	
-//	OurVRControls = new THREE.VRControls( Camera,Renderer.domElement );
+	if ( WEBVR.isLatestAvailable() === false ){
+		document.body.appendChild( WEBVR.getMessage() );
+	}
+	OurVRControls = new THREE.VRControls( Camera,Renderer.domElement );
 	OurVREffect = new THREE.VREffect( Renderer, Renderer.domElement );
+	if ( WEBVR.isAvailable() === true )
+		document.body.appendChild( WEBVR.getButton( OurVREffect ) );
 	
 	Download_initial_stuff(PreInitChecklist);
 });
@@ -88,15 +92,17 @@ function AttemptFinalInit(OurLoadedThings,PreInitChecklist){
 		if(PreInitChecklist.Downloads[i] === 0)
 			return;
 	
-	FinalInit(OurLoadedThings);
+	PostDownloadInit(OurLoadedThings);
 }
 
-function FinalInit(OurLoadedThings)
+function PostDownloadInit(OurLoadedThings)
 {		 
 	var ControllerModel = OurLoadedThings[0].children[1];
 	
-	for(var i = 0; i < ControllerModel.geometry.attributes.position.array.length; i++)
-		ControllerModel.geometry.attributes.position.array[i] *= 50;
+//	for(var i = 0; i < ControllerModel.geometry.attributes.position.array.length; i++)
+//		ControllerModel.geometry.attributes.position.array[i] *= 50;
+//	for(var i = 0; i < 8; i++) //hack because units
+//		object.scale.multiplyScalar(0.5);
 	
 	var Models = Array();
 	Loadpdb("1L2Y", Models);

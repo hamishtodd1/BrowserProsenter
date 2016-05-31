@@ -12,7 +12,7 @@ var Central_X_axis = new THREE.Vector3(1,0,0);
 var ourclock = new THREE.Clock( true ); //.getElapsedTime ()
 var delta_t = 0;
 var logged = 0;
-var debugging = 0;
+var debugging = 1;
 
 //Static. At least in some sense.
 var socket = io();
@@ -22,6 +22,8 @@ var gentilis;
 var Scene;
 var Camera;
 
+var INITIAL_CAMERA_POSITION = new THREE.Vector3(0,0,0.1);
+
 var Master;
 
 var OurVREffect;
@@ -30,16 +32,11 @@ var OurVRControls;
 var OurPDBLoader = new THREE.PDBLoader(); //or are you supposed to create these on the fly?
 var OurOBJLoader = new THREE.OBJLoader();
 
-var VRMode = 1;
+var VRMODE = 0;
 
 var video;
 var videoTexture;
 var videoImageContext;
-
-if ( WEBVR.isLatestAvailable() === false ){
-	VRMODE = 0;
-//	document.body.appendChild( WEBVR.getMessage() );
-}
 
 //We have a "protein of interest" that the non-VR folks are looking at. When the VRer picks up a new one, their focus snaps to that
 
@@ -82,7 +79,9 @@ if ( WEBVR.isLatestAvailable() === false ){
  * Can the VRer control your pitch though?
  */
 
-
+/*
+ * should be able to highlight the backbone by having something shoot down it.
+ */
 
 /*
  * Might be nice to have the Vive's video input, but only when you're looking at the audience. 

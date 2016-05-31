@@ -27,7 +27,7 @@ function UpdateHands(Models,Users)
 			
 			//i > 0 because it's hard to think of a situation in which you want to hold your own camera
 			//note that no camera other than our own is picked up. The models are just that - models
-			if( i > 0 && Users[i].Controller.position.distanceTo( Camera.position ) < 10 )
+			if( i > 0 && Users[i].Controller.position.distanceTo( Camera.position ) < 10 && !VRMODE )
 			{
 				//TODO iff you're not receiving input from a head tracker
 				AttemptPickup(Users[i].Controller, Camera);

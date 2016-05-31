@@ -29,6 +29,9 @@ function Create_first_model( geometryAtoms ) {
 	ReturnedModel.add( Create_trace_representation_mesh( geometryAtoms ) );
 //	ModelZero.add( Create_ribbon_representation_mesh( geometryAtoms ) );
 	
+	for(var i = 0; i < 7; i++) //hack because units
+		ReturnedModel.scale.multiplyScalar(0.5);
+	
 	return ReturnedModel;
 }
 
