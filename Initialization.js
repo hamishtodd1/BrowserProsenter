@@ -39,9 +39,6 @@ socket.on('OnConnect_Message', function(msg)
 	 * 
 	 */
 	
-	
-	
-	
 	document.body.appendChild( Renderer.domElement );
 	
 	Scene = new THREE.Scene();
@@ -65,7 +62,7 @@ socket.on('OnConnect_Message', function(msg)
 		CameraPosition: new THREE.Vector3(),
 		CameraQuaternion: new THREE.Quaternion(),
 		
-		HandPosition: new THREE.Vector3(), //may get these from somewhere in future
+		HandPosition: new THREE.Vector3(0,-10000,0), //may get these from somewhere in future
 		HandQuaternion: new THREE.Quaternion(),
 		
 		Gripping: 0,

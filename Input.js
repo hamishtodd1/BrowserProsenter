@@ -2,12 +2,15 @@
 var InputObject = { //only allowed to use this in this file and maybe in initialization
 	UserDisconnect: "",
 	UserData: Array(), //maybe the coming values should be properties of the objects? There are probably best practices...
+	
 	ModelPositions: Array(),
 	ModelQuaternions: Array(),
 	ModelsReSynched: 0,
+	
 	UserOrbitRequest: new THREE.Vector3(), //vector2, but we may want to cross product
 	UserString: "",
 	UserPressedEnter: 0,
+	
 	clientX: 0,
 	clientY: 0
 };
@@ -32,41 +35,41 @@ function ReadInput(Users, ControllerModel,Models)
 	
 	handle_Connects_and_Disconnects(Users,ControllerModel,Models);
 	
-	//orbit stuff. GearVR stuff will be very comparable
-	if(!VRMODE)
-	{
-		var FocussedModelPosition = new THREE.Vector3();
-		
-		var CameraRelativeToModelZero = Camera.position.clone();
-		CameraRelativeToModelZero.sub(FocussedModelPosition); //Models[0].position
-		
-		var CameraLongtitude = Math.atan2(CameraRelativeToModelZero.z, CameraRelativeToModelZero.x);
-		CameraLongtitude += InputObject.UserOrbitRequest.x * 0.01;
-		
-		var CameraLatitude = Math.atan2(CameraRelativeToModelZero.y, Math.sqrt(
-				CameraRelativeToModelZero.z * CameraRelativeToModelZero.z + 
-				CameraRelativeToModelZero.x * CameraRelativeToModelZero.x ));
-		CameraLatitude += InputObject.UserOrbitRequest.y * 0.0077;
-		
-		var polerepulsion = 0.01;
-		if(Math.abs(CameraLatitude) + polerepulsion > TAU / 4 )
-		{
-			if( CameraLatitude > 0 )
-				CameraLatitude = TAU / 4 - polerepulsion;
-			else
-				CameraLatitude =-TAU / 4 + polerepulsion;
-		}
-		
-		Camera.position.set(
-			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.cos(CameraLongtitude),
-			CameraRelativeToModelZero.length() * Math.sin(CameraLatitude),
-			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.sin(CameraLongtitude) );
-		Camera.position.add(FocussedModelPosition);
-		Camera.lookAt(FocussedModelPosition);
-		
-		InputObject.UserOrbitRequest.set(0,0,0);
-				//don't let them get up to the pole
-	}
+	//orbit stuff. GearVR stuff will be very comparable. WARNING, uncomment this and you have problems with camera being picked up!
+//	if(!VRMODE)
+//	{
+//		var FocussedModelPosition = new THREE.Vector3();
+//		
+//		var CameraRelativeToModelZero = Camera.position.clone();
+//		CameraRelativeToModelZero.sub(FocussedModelPosition); //Models[0].position
+//		
+//		var CameraLongtitude = Math.atan2(CameraRelativeToModelZero.z, CameraRelativeToModelZero.x);
+//		CameraLongtitude += InputObject.UserOrbitRequest.x * 0.01;
+//		
+//		var CameraLatitude = Math.atan2(CameraRelativeToModelZero.y, Math.sqrt(
+//				CameraRelativeToModelZero.z * CameraRelativeToModelZero.z + 
+//				CameraRelativeToModelZero.x * CameraRelativeToModelZero.x ));
+//		CameraLatitude += InputObject.UserOrbitRequest.y * 0.0077;
+//		
+//		var polerepulsion = 0.01;
+//		if(Math.abs(CameraLatitude) + polerepulsion > TAU / 4 )
+//		{
+//			if( CameraLatitude > 0 )
+//				CameraLatitude = TAU / 4 - polerepulsion;
+//			else
+//				CameraLatitude =-TAU / 4 + polerepulsion;
+//		}
+//		
+//		Camera.position.set(
+//			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.cos(CameraLongtitude),
+//			CameraRelativeToModelZero.length() * Math.sin(CameraLatitude),
+//			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.sin(CameraLongtitude) );
+//		Camera.position.add(FocussedModelPosition);
+//		Camera.lookAt(FocussedModelPosition);
+//		
+//		InputObject.UserOrbitRequest.set(0,0,0);
+//				//don't let them get up to the pole
+//	}
 	
 	
 
@@ -82,7 +85,7 @@ function ReadInput(Users, ControllerModel,Models)
 	
 	for(var i = 1; i < Users.length; i++)
 	{
-		if(Users[i].CameraObject.position.distanceTo(Camera.position) < 1)
+		if(Users[i].CameraObject.position.distanceTo(Camera.position) < 0.07)
 			Users[i].CameraObject.visible = false;
 		else
 			Users[i].CameraObject.visible = true;
@@ -99,6 +102,8 @@ function ReadInput(Users, ControllerModel,Models)
 		InputObject.ModelsReSynched = 0;
 	}
 	
+	if(!logged) console.log(InputObject.UserData[0]);
+	logged = 1;
 	socket.emit('UserStateUpdate', InputObject.UserData[0] ); //we could emit it with every control change?
 }
 

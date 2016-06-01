@@ -15,9 +15,9 @@ function handle_Connects_and_Disconnects(Users,ControllerModel,Models)
 				CameraArgument = "you need to make it";
 			
 			Users[i] = new User(
-					InputObject.UserData[i].Gripping, 		InputObject.UserData[i].ID,					ControllerModel,
-					InputObject.UserData[i].HandPosition,  	InputObject.UserData[i].HandQuaternion,
-					InputObject.UserData[i].CameraPosition,	InputObject.UserData[i].CameraQuaternion, 	CameraArgument, i);
+				InputObject.UserData[i].Gripping, 		InputObject.UserData[i].ID,					ControllerModel,
+				InputObject.UserData[i].HandPosition,  	InputObject.UserData[i].HandQuaternion,
+				InputObject.UserData[i].CameraPosition,	InputObject.UserData[i].CameraQuaternion, 	CameraArgument, i);
 			
 			Scene.add(Users[i].Controller);
 			Scene.add(Users[i].CameraObject);
@@ -134,7 +134,7 @@ function User(Gripping, ID, ControllerModel,
 	this.Controller.material = ControllerModel.material.clone();
 	this.Controller.material.color.copy(newUserColor);
 
-	this.Controller.position.copy(HandPosition);
+	this.Controller.position.copy(HandPosition); //so we're not doing anything with handposition
 	
 	//this can be removed once you have tracking
 	{
@@ -181,13 +181,14 @@ function GetInput()
 							this.Controller.position.x = gamepads[i].pose.position[0];
 							this.Controller.position.y = gamepads[i].pose.position[1];
 							this.Controller.position.z = gamepads[i].pose.position[2];
-							//assuming it's a quaternion
+							
+							//pretty hacky solution to relative position problem
+							this.Controller.position.add(INITIAL_CAMERA_POSITION);
+							
 							this.Controller.quaternion.x = gamepads[i].pose.orientation[0];
 							this.Controller.quaternion.y = gamepads[i].pose.orientation[1];
 							this.Controller.quaternion.z = gamepads[i].pose.orientation[2];
 							this.Controller.quaternion.w = gamepads[i].pose.orientation[3];
-//							copyquat( this.Controller.quaternion,	gamepads[i].pose.orientation );
-							
 						      
 							//a very primitive way to work out grippingness. If any button on any gamepad is pushed.
 							for (var j = 0; j < gamepads[i].buttons.length; ++j)
@@ -201,11 +202,14 @@ function GetInput()
 								if( j === gamepads[i].buttons.length - 1)
 									this.Gripping = 0;
 							}
+							
+							//TODO deffo a bit weird to have this one go in the opposite direction. Certainly introduces latency
+							copyvec( InputObject.UserData[i].HandPosition,	this.Controller.position);
+							copyquat(InputObject.UserData[i].HandQuaternion,this.Controller.quaternion);
+							InputObject.UserData[i].Gripping = this.Gripping;
 						}
 					}
 				}
-				
-				//WE ARE NO LONGER HAVING AN INPUTOBJECT FOR OUR OWN HAND POSITION
 			}
 			else
 			{

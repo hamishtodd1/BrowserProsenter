@@ -2,8 +2,7 @@
 
 function UpdateWorld(Models,Hands)
 {
-	if( VRMODE )
-		UpdateHands(Models,Hands);
+	UpdateHands(Models,Hands);
 	
 	for(var i = 0; i < Models.length; i++)
 		Models[i].children[0].BoundingBoxAppearance.update(Models[i]);
