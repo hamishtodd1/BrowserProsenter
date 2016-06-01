@@ -33,40 +33,40 @@ function ReadInput(Users, ControllerModel,Models)
 	handle_Connects_and_Disconnects(Users,ControllerModel,Models);
 	
 	//orbit stuff. GearVR stuff will be very comparable
-//	if(!VRMODE)
-//	{
-//		var FocussedModelPosition = new THREE.Vector3();
-//		
-//		var CameraRelativeToModelZero = Camera.position.clone();
-//		CameraRelativeToModelZero.sub(FocussedModelPosition); //Models[0].position
-//		
-//		var CameraLongtitude = Math.atan2(CameraRelativeToModelZero.z, CameraRelativeToModelZero.x);
-//		CameraLongtitude += InputObject.UserOrbitRequest.x * 0.01;
-//		
-//		var CameraLatitude = Math.atan2(CameraRelativeToModelZero.y, Math.sqrt(
-//				CameraRelativeToModelZero.z * CameraRelativeToModelZero.z + 
-//				CameraRelativeToModelZero.x * CameraRelativeToModelZero.x ));
-//		CameraLatitude += InputObject.UserOrbitRequest.y * 0.0077;
-//		
-//		var polerepulsion = 0.01;
-//		if(Math.abs(CameraLatitude) + polerepulsion > TAU / 4 )
-//		{
-//			if( CameraLatitude > 0 )
-//				CameraLatitude = TAU / 4 - polerepulsion;
-//			else
-//				CameraLatitude =-TAU / 4 + polerepulsion;
-//		}
-//		
-//		Camera.position.set(
-//			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.cos(CameraLongtitude),
-//			CameraRelativeToModelZero.length() * Math.sin(CameraLatitude),
-//			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.sin(CameraLongtitude) );
-//		Camera.position.add(FocussedModelPosition);
-//		Camera.lookAt(FocussedModelPosition);
-//		
-//		InputObject.UserOrbitRequest.set(0,0,0);
-//				//don't let them get up to the pole
-//	}
+	if(!VRMODE)
+	{
+		var FocussedModelPosition = new THREE.Vector3();
+		
+		var CameraRelativeToModelZero = Camera.position.clone();
+		CameraRelativeToModelZero.sub(FocussedModelPosition); //Models[0].position
+		
+		var CameraLongtitude = Math.atan2(CameraRelativeToModelZero.z, CameraRelativeToModelZero.x);
+		CameraLongtitude += InputObject.UserOrbitRequest.x * 0.01;
+		
+		var CameraLatitude = Math.atan2(CameraRelativeToModelZero.y, Math.sqrt(
+				CameraRelativeToModelZero.z * CameraRelativeToModelZero.z + 
+				CameraRelativeToModelZero.x * CameraRelativeToModelZero.x ));
+		CameraLatitude += InputObject.UserOrbitRequest.y * 0.0077;
+		
+		var polerepulsion = 0.01;
+		if(Math.abs(CameraLatitude) + polerepulsion > TAU / 4 )
+		{
+			if( CameraLatitude > 0 )
+				CameraLatitude = TAU / 4 - polerepulsion;
+			else
+				CameraLatitude =-TAU / 4 + polerepulsion;
+		}
+		
+		Camera.position.set(
+			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.cos(CameraLongtitude),
+			CameraRelativeToModelZero.length() * Math.sin(CameraLatitude),
+			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.sin(CameraLongtitude) );
+		Camera.position.add(FocussedModelPosition);
+		Camera.lookAt(FocussedModelPosition);
+		
+		InputObject.UserOrbitRequest.set(0,0,0);
+				//don't let them get up to the pole
+	}
 	
 	
 

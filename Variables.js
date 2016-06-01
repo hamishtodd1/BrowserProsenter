@@ -22,7 +22,7 @@ var gentilis;
 var Scene;
 var Camera;
 
-var INITIAL_CAMERA_POSITION = new THREE.Vector3(0,0,0.1);
+var INITIAL_CAMERA_POSITION = new THREE.Vector3(0,0,0.6);
 
 var Master;
 
