@@ -68,9 +68,6 @@ function ReadInput(Users, ControllerModel,Models)
 //				//don't let them get up to the pole
 //	}
 	
-	var gamepads = navigator.getGamepads();
-//    console.log(gamepads);
-	
 	
 
 	if( InputObject.UserPressedEnter === 1 )
@@ -93,7 +90,6 @@ function ReadInput(Users, ControllerModel,Models)
 	
 	if(InputObject.ModelsReSynched && Models.length === InputObject.ModelPositions.length ) //will be destroyed by the possibility of deleting models
 	{
-		console.log(InputObject.ModelPositions)
 		for(var i = 0; i < Models.length; i++)
 		{
 			Models[i].position.copy(InputObject.ModelPositions[i]);

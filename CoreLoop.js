@@ -1,10 +1,9 @@
 //A live fish
 
-function UpdateWorld(Models,Hands){
-	
-//	Models[0].rotateOnAxis(Central_Y_axis, TAU / 60 / 16);
-
-	UpdateHands(Models,Hands);
+function UpdateWorld(Models,Hands)
+{
+	if( VRMODE )
+		UpdateHands(Models,Hands);
 	
 	for(var i = 0; i < Models.length; i++)
 		Models[i].children[0].BoundingBoxAppearance.update(Models[i]);
@@ -28,5 +27,5 @@ function Render(Models,Users, ControllerModel) {
 	requestAnimationFrame( function(){
 		Render(Models,Users,ControllerModel);
 	} );
-	OurVREffect.render( Scene, Camera ); //is it using that camera?
+	OurVREffect.render( Scene, Camera ); //will be fine if VR is not enabled
 }

@@ -77,13 +77,17 @@ socket.on('OnConnect_Message', function(msg)
 		Downloads: Array()
 	};
 	
-	if ( WEBVR.isLatestAvailable() === false ){
-		document.body.appendChild( WEBVR.getMessage() );
-	}
-	OurVRControls = new THREE.VRControls( Camera,Renderer.domElement );
 	OurVREffect = new THREE.VREffect( Renderer, Renderer.domElement );
-	if ( WEBVR.isAvailable() === true )
-		document.body.appendChild( WEBVR.getButton( OurVREffect ) );
+	
+	if ( WEBVR.isLatestAvailable() === false ){
+//		document.body.appendChild( WEBVR.getMessage() );
+	}
+	else
+	{
+		OurVRControls = new THREE.VRControls( Camera,Renderer.domElement );
+		if ( WEBVR.isAvailable() === true )
+			document.body.appendChild( WEBVR.getButton( OurVREffect ) );
+	}
 	
 	Download_initial_stuff(PreInitChecklist);
 });
