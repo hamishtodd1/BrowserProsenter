@@ -18,11 +18,17 @@ function UpdateHands(Models,Users)
 		if(Users[i].Gripping)
 		{			
 			for(var j = 0; j < Models.length; j++)
-			if( point_in_BoxHelper(Users[i].Controller.position,
-					Models[j].children[0].BoundingBoxAppearance.geometry.attributes.position.array) )
 			{
-				AttemptPickup(Users[i].Controller, Models[j]);
+				if( point_in_BoxHelper(Users[i].Controller.position,
+						Models[j].children[0].BoundingBoxAppearance.geometry.attributes.position.array) )
+				{
+					AttemptPickup(Users[i].Controller, Models[j]);
+				}
 			}
+			
+			if(Users[i].Controller.position.distanceTo(BBSRC_Logo.position))
+				AttemptPickup(Users[i].Controller, BBSRC_Logo);
+			
 			
 			//i > 0 because it's hard to think of a situation in which you want to hold your own camera
 			//note that no camera other than our own is picked up. The models are just that - models

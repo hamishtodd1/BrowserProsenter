@@ -223,7 +223,6 @@ document.addEventListener( 'mousemove', function(event)
 	
 	if(InputObject.UserData[0].Gripping) //and only if you're not in VR
 	{
-		console.log("yeah")
 		InputObject.UserOrbitRequest.x = event.clientX - InputObject.clientX;
 		InputObject.UserOrbitRequest.y = event.clientY - InputObject.clientY;
 	}

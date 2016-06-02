@@ -24,6 +24,8 @@ var Camera;
 
 var INITIAL_CAMERA_POSITION = new THREE.Vector3(0,0,0.6);
 
+var BBSRC_Logo; //temp
+
 var Master;
 
 var OurVREffect;

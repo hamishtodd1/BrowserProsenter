@@ -6,6 +6,7 @@ function Download_initial_stuff(PreInitChecklist) {
 	var OurLoadedThingsLinks = Array();
 	OurLoadedThingsLinks[0] = "http://hamishtodd1.github.io/BrowserProsenter/Data/vr_controller_vive_1_5.obj";
 	OurLoadedThingsLinks[1] = "gentilis.js";
+	OurLoadedThingsLinks[2] = "http://hamishtodd1.github.io/BrowserProsenter/Data/Hello.png";
 //	OurLoadedThingsLinks[1] = testproteinlink;
 	
 	var OurLoadedThings = Array(OurLoadedThingsLinks.length);
@@ -121,9 +122,13 @@ function Loadobj_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklis
 function Loadpic_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklist)
 {
 	var OurPicLoader = new THREE.TextureLoader();
+	OurPicLoader.crossOrigin = '';
 	OurPicLoader.load(linkstring,
-		function ( object ) {
-			OurLoadedThings[ThisIndex] = object;
+		function ( texture ) {		
+			OurLoadedThings[ThisIndex] = new THREE.Mesh(
+					new THREE.CubeGeometry(0.7, 0.7, 0),
+					new THREE.MeshBasicMaterial({map: texture}) );
+			
 			PreInitChecklist.Downloads[ThisIndex] = 1;
 			AttemptFinalInit(OurLoadedThings,PreInitChecklist);
 		},

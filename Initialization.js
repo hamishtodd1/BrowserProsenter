@@ -98,8 +98,14 @@ function PostDownloadInit(OurLoadedThings)
 //	for(var i = 0; i < 8; i++) //hack because units
 //		object.scale.multiplyScalar(0.5);
 	
+	//"grippable objects"
 	var Models = Array();
 	Loadpdb("4ins", Models);
+	
+	BBSRC_Logo = OurLoadedThings[2];
+	BBSRC_Logo.position.copy(INITIAL_CAMERA_POSITION);
+	BBSRC_Logo.position.z *= -0.5;
+	Scene.add(BBSRC_Logo)
 	
 	var Users = Array();
 	
