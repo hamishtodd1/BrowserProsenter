@@ -26,6 +26,8 @@ function Download_initial_stuff(PreInitChecklist) {
 			Loadpdb_initially(OurLoadedThingsLinks[i],i,OurLoadedThings, PreInitChecklist);
 		else if( format === ".js")
 			Loadfont_initially(OurLoadedThingsLinks[i],i,OurLoadedThings, PreInitChecklist);
+		else if( format === "png")
+			Loadpic_initially(OurLoadedThingsLinks[i],i,OurLoadedThings, PreInitChecklist);
 
 		else console.log("unrecognized format: " + format);
 	}
@@ -36,6 +38,14 @@ function Download_initial_stuff(PreInitChecklist) {
 	 * You're also going to have a new folder on your github page for all this crap
 	 * Aaaand we'll do slides too
 	 */
+}
+
+function AttemptFinalInit(OurLoadedThings,PreInitChecklist){
+	for(var i = 0; i < PreInitChecklist.Downloads.length; i++)
+		if(PreInitChecklist.Downloads[i] === 0)
+			return;
+	
+	PostDownloadInit(OurLoadedThings);
 }
 
 function Loadpdb(linkstring, Models)
@@ -105,5 +115,19 @@ function Loadobj_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklis
 		},
 		function ( xhr ) {}, //progression function
 		function ( xhr ) { console.error( "couldn't load OBJ" ); }
+	);
+}
+
+function Loadpic_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklist)
+{
+	var OurPicLoader = new THREE.TextureLoader();
+	OurPicLoader.load(linkstring,
+		function ( object ) {
+			OurLoadedThings[ThisIndex] = object;
+			PreInitChecklist.Downloads[ThisIndex] = 1;
+			AttemptFinalInit(OurLoadedThings,PreInitChecklist);
+		},
+		function ( xhr ) {}, //progression function
+		function ( xhr ) { console.error( "couldn't load pic" ); }
 	);
 }

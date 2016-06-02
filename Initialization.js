@@ -89,14 +89,6 @@ socket.on('OnConnect_Message', function(msg)
 	Download_initial_stuff(PreInitChecklist);
 });
 
-function AttemptFinalInit(OurLoadedThings,PreInitChecklist){
-	for(var i = 0; i < PreInitChecklist.Downloads.length; i++)
-		if(PreInitChecklist.Downloads[i] === 0)
-			return;
-	
-	PostDownloadInit(OurLoadedThings);
-}
-
 function PostDownloadInit(OurLoadedThings)
 {		 
 	var ControllerModel = OurLoadedThings[0].children[1];
