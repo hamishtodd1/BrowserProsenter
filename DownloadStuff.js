@@ -14,7 +14,7 @@ function Download_initial_stuff(PreInitChecklist) {
 	
 	for(var i = 0; i < OurLoadedThingsLinks.length; i++){
 		var format;
-		//TODO should look for the "."
+		//TODO not necessarily three letters, should look for the "."
 		if(OurLoadedThingsLinks[i][OurLoadedThingsLinks[i].length - 1] === "/" )
 			format = OurLoadedThingsLinks[i].substr(OurLoadedThingsLinks[i].length - 4,3);
 		else

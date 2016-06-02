@@ -77,7 +77,10 @@ function User(Gripping, ID, ControllerModel,
 	}
 	var newUserColor = new THREE.Color(newUserColorComponent,newUserColorComponent,newUserColorComponent);
 	
-	if( CameraArgument === "you need to make it" )
+	if( CameraArgument !== "you need to make it" ) {
+		this.CameraObject = CameraArgument;
+	}
+	else
 	{
 		this.CameraObject = new THREE.Object3D();
 		
@@ -120,10 +123,6 @@ function User(Gripping, ID, ControllerModel,
 		
 		this.CameraObject.scale.set(0.015,0.015,0.015);
 	}
-	else {
-		this.CameraObject = CameraArgument;
-	}
-	
 	
 //	this.CameraObject.position.copyvec(CameraPosition);
 	copyvec(this.CameraObject.position,CameraPosition);
