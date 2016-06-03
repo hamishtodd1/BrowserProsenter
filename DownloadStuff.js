@@ -126,7 +126,7 @@ function Loadpic_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklis
 	OurPicLoader.load(linkstring,
 		function ( texture ) {		
 			OurLoadedThings[ThisIndex] = new THREE.Mesh(
-					new THREE.CubeGeometry(0.7, 0.7, 0),
+					new THREE.CubeGeometry(0.83, 0.83, 0),
 					new THREE.MeshBasicMaterial({map: texture}) );
 			
 			PreInitChecklist.Downloads[ThisIndex] = 1;

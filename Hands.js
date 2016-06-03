@@ -26,7 +26,7 @@ function UpdateHands(Models,Users)
 				}
 			}
 			
-			if(Users[i].Controller.position.distanceTo(BBSRC_Logo.position))
+			if(Users[i].Controller.position.distanceTo(BBSRC_Logo.position) < 0.1)
 				AttemptPickup(Users[i].Controller, BBSRC_Logo);
 			
 			
