@@ -42,6 +42,10 @@ var videoImageContext;
 
 //We have a "protein of interest" that the non-VR folks are looking at. When the VRer picks up a new one, their focus snaps to that
 
+//Probably it's the case that iff there's a person in VR, you want the non-VRers to be merged into one camera
+
+//Want to see the link on the wall behind the camera
+
 /*
  * When you twist an AA, a ramachandran plot should appear
  * Does the whole donut spin or does it turn inside out?
