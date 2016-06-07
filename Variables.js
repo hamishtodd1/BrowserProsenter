@@ -31,7 +31,6 @@ var Master;
 var OurVREffect;
 var OurVRControls;
 
-var OurPDBLoader = new THREE.PDBLoader(); //or are you supposed to create these on the fly?
 var OurOBJLoader = new THREE.OBJLoader();
 
 var VRMODE = 0;

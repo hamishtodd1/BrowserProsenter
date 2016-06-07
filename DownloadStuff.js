@@ -51,6 +51,8 @@ function AttemptFinalInit(OurLoadedThings,PreInitChecklist){
 
 function Loadpdb(linkstring, Models)
 {
+	var OurPDBLoader = new THREE.PDBLoader();
+	
 	if(linkstring.length === 4)
 	{
 		linkstring = "http://files.rcsb.org/download/" + linkstring + ".pdb"
@@ -95,7 +97,9 @@ function Loadfont_initially(linkstring,ThisIndex,OurLoadedThings, PreInitCheckli
 
 //separated these out so that "ThisIndex" becomes call-by-parameter
 function Loadpdb_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklist)
-{	
+{
+	var OurPDBLoader = new THREE.PDBLoader(); //or are you supposed to create these on the fly?
+	
 	OurPDBLoader.load(linkstring,
 		function ( geometryAtoms, geometryBonds, json ) {
 			OurLoadedThings[ThisIndex] = Create_first_model( geometryAtoms );
