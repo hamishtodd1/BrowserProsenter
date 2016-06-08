@@ -105,7 +105,10 @@ function PostDownloadInit(OurLoadedThings)
 	BBSRC_Logo = OurLoadedThings[2];
 	BBSRC_Logo.position.copy(INITIAL_CAMERA_POSITION);
 	BBSRC_Logo.position.z *= -0.5;
-	Scene.add(BBSRC_Logo)
+	BBSRC_Logo.position.y = -1;
+	Scene.add(BBSRC_Logo);
+	
+	Ourface = OurLoadedThings[3];
 	
 	var Users = Array();
 	

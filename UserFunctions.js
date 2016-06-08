@@ -99,6 +99,7 @@ function User(Gripping, ID, ControllerModel,
 		}
 		this.CameraObject.children[0].material.side = THREE.DoubleSide;
 		
+		//box
 		this.CameraObject.add(new THREE.Mesh( 
 				new THREE.BoxGeometry(
 						CameraRadius * Math.sqrt(2),
@@ -120,6 +121,11 @@ function User(Gripping, ID, ControllerModel,
 			this.CameraObject.children[2].geometry.vertices[i].z += CameraRadius / 2;
 			this.CameraObject.children[2].geometry.vertices[i].applyAxisAngle(Central_X_axis, -TAU / 4);
 		}
+		
+		if(newUserColorComponent === 0)
+			this.CameraObject.add(Ourface)
+		Ourface.scale.set(30,30,30);
+		Ourface.position.z = -10;
 		
 		this.CameraObject.scale.set(0.006,0.006,0.006);
 	}

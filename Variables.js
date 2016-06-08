@@ -24,8 +24,6 @@ var Camera;
 
 var INITIAL_CAMERA_POSITION = new THREE.Vector3(0,0,0.6);
 
-var BBSRC_Logo; //temp
-
 var Master;
 
 var OurVREffect;
@@ -38,6 +36,10 @@ var VRMODE = 0;
 var video;
 var videoTexture;
 var videoImageContext;
+
+//temp
+var BBSRC_Logo;
+var Ourface;
 
 //We have a "protein of interest" that the non-VR folks are looking at. When the VRer picks up a new one, their focus snaps to that
 

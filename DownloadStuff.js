@@ -1,12 +1,13 @@
 function Download_initial_stuff(PreInitChecklist) {
 	//Trp-Cage Miniprotein Construct TC5b, 20 residues: 1l2y. Rubisco: 1rcx. Insulin: 4ins
-	var testproteinlink = "http://files.rcsb.org/download/1l2y.pdb";
+	var testproteinlink = "http://files.rcsb.org/download/4ins.pdb";
 	var testobjlink = "http://threejs.org/examples/obj/male02/male02.obj"; //TODO don't waste their bandwidth
 	
 	var OurLoadedThingsLinks = Array();
 	OurLoadedThingsLinks[0] = "http://hamishtodd1.github.io/BrowserProsenter/Data/vr_controller_vive_1_5.obj";
 	OurLoadedThingsLinks[1] = "gentilis.js";
 	OurLoadedThingsLinks[2] = "http://hamishtodd1.github.io/BrowserProsenter/Data/Hello.png";
+	OurLoadedThingsLinks[3] = "http://hamishtodd1.github.io/BrowserProsenter/Data/face.png";
 //	OurLoadedThingsLinks[1] = testproteinlink;
 	
 	var OurLoadedThings = Array(OurLoadedThingsLinks.length);
