@@ -51,7 +51,7 @@ io.on('connection', function(socket){
 });
 
 http.listen(3000, function(){
-	console.log('Server is listening on localhost:3000, go there in a browser');
+	console.log('Server is listening on port 3000, go there in a browser');
 });
 
 //Temporarily: we have connection 0, the lecturer, and other connections are spectators who share a camera

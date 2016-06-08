@@ -121,7 +121,7 @@ function User(Gripping, ID, ControllerModel,
 			this.CameraObject.children[2].geometry.vertices[i].applyAxisAngle(Central_X_axis, -TAU / 4);
 		}
 		
-		this.CameraObject.scale.set(0.015,0.015,0.015);
+		this.CameraObject.scale.set(0.006,0.006,0.006);
 	}
 	
 //	this.CameraObject.position.copyvec(CameraPosition);
