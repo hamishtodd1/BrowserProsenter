@@ -1,3 +1,5 @@
+var loose_surface;
+
 //the first init
 socket.on('OnConnect_Message', function(msg)
 {
@@ -14,6 +16,7 @@ socket.on('OnConnect_Message', function(msg)
 	Renderer.sortObjects = false;
 	Renderer.shadowMap.enabled = true;
 	Renderer.shadowMap.cullFace = THREE.CullFaceBack;
+	document.body.appendChild( Renderer.domElement );
 		
 //	var HORIZONTAL_FOV_OCULUS = 110;
 	var HORIZONTAL_FOV_VIVE = 110;
@@ -39,8 +42,6 @@ socket.on('OnConnect_Message', function(msg)
 	 * 
 	 */
 	
-	document.body.appendChild( Renderer.domElement );
-	
 	Scene = new THREE.Scene();
 	
 	//Camera will be added to the scene when the user is set up
@@ -53,27 +54,6 @@ socket.on('OnConnect_Message', function(msg)
 	Camera.position.applyAxisAngle(Central_Y_axis,fireplaceangle);
 	Camera.lookAt(new THREE.Vector3());
 	
-	Add_stuff_from_demo();
-//	initVideo();
-	
-	//us. We'll be added to the user array soon. 
-	//This is also the place where this object is "defined"
-	InputObject.UserData.push({
-		CameraPosition: new THREE.Vector3(),
-		CameraQuaternion: new THREE.Quaternion(),
-		
-		HandPosition: new THREE.Vector3(0,-10000,0), //may get these from somewhere in future
-		HandQuaternion: new THREE.Quaternion(),
-		
-		Gripping: 0,
-		ID: msg.ID
-	});
-	
-	//you can add other things to this
-	var PreInitChecklist = {
-		Downloads: Array()
-	};
-	
 	OurVREffect = new THREE.VREffect( Renderer, Renderer.domElement );
 	
 	if ( WEBVR.isLatestAvailable() === false ){
@@ -81,36 +61,67 @@ socket.on('OnConnect_Message', function(msg)
 	}
 	else
 	{
+		//This is where the split could get more fundamental. Many things to take into account: it may be a google cardboard.
 		OurVRControls = new THREE.VRControls( Camera,Renderer.domElement );
 		if ( WEBVR.isAvailable() === true )
 			document.body.appendChild( WEBVR.getButton( OurVREffect ) );
 	}
 	
+	Add_stuff_from_demo();
+//	initVideo();
+	
+	//us. We'll be added to the user array soon, in the way everyone else is.
+	//This is also the place where the user object is defined
+	InputObject.UserData.push({
+		CameraPosition: new THREE.Vector3(),
+		CameraQuaternion: new THREE.Quaternion(),
+		
+		HandPosition: new THREE.Vector3(0,-10000,0), //By default it's offscreen.
+		HandQuaternion: new THREE.Quaternion(),
+		
+		Gripping: 0,
+		ID: msg.ID
+	});
+	
+	get_NGL_protein();
+	
+	//you can add other things to this
+	var PreInitChecklist = {
+		Downloads: Array()
+	};
 	Download_initial_stuff(PreInitChecklist);
 });
 
 function PostDownloadInit(OurLoadedThings)
 {		 
-	var ControllerModel = OurLoadedThings[0].children[1];
-	
-//	for(var i = 0; i < ControllerModel.geometry.attributes.position.array.length; i++)
-//		ControllerModel.geometry.attributes.position.array[i] *= 50;
-//	for(var i = 0; i < 8; i++) //hack because units
-//		object.scale.multiplyScalar(0.5);
+	var ControllerModel = OurLoadedThings[0].children[0];
 	
 	//"grippable objects"
 	var Models = Array();
-	Loadpdb("4ins", Models);
-	
-	BBSRC_Logo = OurLoadedThings[2];
-	BBSRC_Logo.position.copy(INITIAL_CAMERA_POSITION);
-	BBSRC_Logo.position.z *= -0.5;
-	BBSRC_Logo.position.y = -1;
-	Scene.add(BBSRC_Logo);
-	
-	Ourface = OurLoadedThings[3];
+//	Loadpdb("4ins", Models);
 	
 	var Users = Array();
 	
 	Render(Models, Users, ControllerModel);
+}
+
+function get_NGL_protein()
+{
+	var xhr = new XMLHttpRequest();
+	xhr.open( "GET", "http://mmtf.rcsb.org/v0.2/full/1l2y", true );
+	xhr.addEventListener( 'load', function( event ){
+		var blob = new Blob( [ xhr.response ], { type: 'application/octet-binary'} );
+		
+		stage.loadFile( blob, {
+				ext: "mmtf", defaultRepresentation: true
+		} ).then( function( o ){
+			o.addRepresentation( "surface" );
+			console.log(o.reprList);
+			loose_surface = o.reprList[3].repr;
+			
+			//we would like to know when it has finished making its representation and call the code currently in input			
+		} );
+	} );
+	xhr.responseType = "arraybuffer";
+	xhr.send( null );
 }

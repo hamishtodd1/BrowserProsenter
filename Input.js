@@ -36,40 +36,40 @@ function ReadInput(Users, ControllerModel,Models)
 	handle_Connects_and_Disconnects(Users,ControllerModel,Models);
 	
 	//orbit stuff. GearVR stuff will be very comparable. WARNING, uncomment this and you have problems with camera being picked up!
-//	if(!VRMODE)
-//	{
-//		var FocussedModelPosition = new THREE.Vector3();
-//		
-//		var CameraRelativeToModelZero = Camera.position.clone();
-//		CameraRelativeToModelZero.sub(FocussedModelPosition); //Models[0].position
-//		
-//		var CameraLongtitude = Math.atan2(CameraRelativeToModelZero.z, CameraRelativeToModelZero.x);
-//		CameraLongtitude += InputObject.UserOrbitRequest.x * 0.01;
-//		
-//		var CameraLatitude = Math.atan2(CameraRelativeToModelZero.y, Math.sqrt(
-//				CameraRelativeToModelZero.z * CameraRelativeToModelZero.z + 
-//				CameraRelativeToModelZero.x * CameraRelativeToModelZero.x ));
-//		CameraLatitude += InputObject.UserOrbitRequest.y * 0.0077;
-//		
-//		var polerepulsion = 0.01;
-//		if(Math.abs(CameraLatitude) + polerepulsion > TAU / 4 )
-//		{
-//			if( CameraLatitude > 0 )
-//				CameraLatitude = TAU / 4 - polerepulsion;
-//			else
-//				CameraLatitude =-TAU / 4 + polerepulsion;
-//		}
-//		
-//		Camera.position.set(
-//			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.cos(CameraLongtitude),
-//			CameraRelativeToModelZero.length() * Math.sin(CameraLatitude),
-//			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.sin(CameraLongtitude) );
-//		Camera.position.add(FocussedModelPosition);
-//		Camera.lookAt(FocussedModelPosition);
-//		
-//		InputObject.UserOrbitRequest.set(0,0,0);
-//				//don't let them get up to the pole
-//	}
+	if(!VRMODE)
+	{
+		var FocussedModelPosition = new THREE.Vector3();
+		
+		var CameraRelativeToModelZero = Camera.position.clone();
+		CameraRelativeToModelZero.sub(FocussedModelPosition); //Models[0].position
+		
+		var CameraLongtitude = Math.atan2(CameraRelativeToModelZero.z, CameraRelativeToModelZero.x);
+		CameraLongtitude += InputObject.UserOrbitRequest.x * 0.01;
+		
+		var CameraLatitude = Math.atan2(CameraRelativeToModelZero.y, Math.sqrt(
+				CameraRelativeToModelZero.z * CameraRelativeToModelZero.z + 
+				CameraRelativeToModelZero.x * CameraRelativeToModelZero.x ));
+		CameraLatitude += InputObject.UserOrbitRequest.y * 0.0077;
+		
+		var polerepulsion = 0.01;
+		if(Math.abs(CameraLatitude) + polerepulsion > TAU / 4 )
+		{
+			if( CameraLatitude > 0 )
+				CameraLatitude = TAU / 4 - polerepulsion;
+			else
+				CameraLatitude =-TAU / 4 + polerepulsion;
+		}
+		
+		Camera.position.set(
+			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.cos(CameraLongtitude),
+			CameraRelativeToModelZero.length() * Math.sin(CameraLatitude),
+			CameraRelativeToModelZero.length() * Math.cos(CameraLatitude) * Math.sin(CameraLongtitude) );
+		Camera.position.add(FocussedModelPosition);
+		Camera.lookAt(FocussedModelPosition);
+		
+		InputObject.UserOrbitRequest.set(0,0,0);
+				//don't let them get up to the pole
+	}
 	
 	
 
@@ -102,8 +102,6 @@ function ReadInput(Users, ControllerModel,Models)
 		InputObject.ModelsReSynched = 0;
 	}
 	
-	if(!logged) console.log(InputObject.UserData[0]);
-	logged = 1;
 	socket.emit('UserStateUpdate', InputObject.UserData[0] ); //we could emit it with every control change?
 }
 
@@ -203,6 +201,8 @@ function ChangeUserString(newstring)
 				shading: THREE.FlatShading
 			}) );
 	
+	TextMesh.scale.set(0.02,0.02,0.02)
+	
 	var TextCenter = new THREE.Vector3();
 	for ( var i = 0, l = TextMesh.geometry.vertices.length; i < l; i ++ ){
 		TextCenter.add( TextMesh.geometry.vertices[ i ] );
@@ -211,6 +211,7 @@ function ChangeUserString(newstring)
 	TextMesh.name = "The User's string";
 
 	TextCenter.multiplyScalar( 1 / TextMesh.geometry.vertices.length );
+	TextCenter.multiplyScalar( TextMesh.scale.x );
 	TextMesh.position.sub(TextCenter);
 	Scene.add(TextMesh);
 }
@@ -249,7 +250,58 @@ document.addEventListener( 'mousedown', function(event)
 	event.preventDefault();
 	
 	InputObject.UserData[0].Gripping = 1;
+	
+	placeholder_interpret_ngl();
 }, false );
+
+function placeholder_interpret_ngl()
+{
+	//if it's surface then you need loose_surface.bufferList[0].group.children[0].children[0].geometry
+//	console.log(loose_surface);
+	var ProteinGeometry = loose_surface.bufferList[0].geometry;
+	
+	var ourcopy = new THREE.Mesh( new THREE.BufferGeometry(),
+				  new THREE.MeshPhongMaterial({side: THREE.DoubleSide /* temp */ }) );
+	
+	var random_vertices = new Float32Array( [
+-8.607999801635742, 3.134999990463257, -1.6180000305175781, 
+-5.631483554840088, 3.997194290161133, -2.678326368331909,
+1.4131258726119995,-6.485607147216797,-1.058377742767334
+	                              ] );
+	
+	var processed_verts = new Float32Array(ProteinGeometry.attributes.position.array.length / 2);
+	for(var i = 0; i < processed_verts.length / 3; i++)
+	{
+		processed_verts[i*3+0] = ProteinGeometry.attributes.position.array[i*6+0];
+		processed_verts[i*3+1] = ProteinGeometry.attributes.position.array[i*6+1];
+		processed_verts[i*3+2] = ProteinGeometry.attributes.position.array[i*6+2];
+	}
+	
+	
+	var random_indices = new Uint16Array(999);
+	for(var i = 0; i < 999; i++)
+	{
+		random_indices[i] = Math.round((ProteinGeometry.attributes.position.array.length / 3 - 1) * Math.random());
+	}
+	
+	ourcopy.geometry.addAttribute( 'position', 
+			new THREE.BufferAttribute( ProteinGeometry.attributes.position.array, 3 ) );
+	ourcopy.geometry.addAttribute( 'normal', 
+			new THREE.BufferAttribute( ProteinGeometry.attributes.normal.array, 3 ) );
+	ourcopy.geometry.setIndex(
+			new THREE.BufferAttribute( ProteinGeometry.index.array, 1 ) );
+	console.log(ProteinGeometry.attributes.position.array)
+	console.log(processed_verts)
+	
+	var num_NaNs =  0;
+	for(var i = 0; i < ProteinGeometry.attributes.position.array.length; i++)
+		if( isNaN( ProteinGeometry.attributes.position.array[i] ))
+			num_NaNs++; //you get this with some proteins
+	if(num_NaNs)console.log("NaNs: ", num_NaNs);
+	
+	ourcopy.scale.set(0.01,0.01,0.01);
+	Scene.add(ourcopy);
+}
 
 document.addEventListener( 'mouseup', function(event) 
 {

@@ -29,17 +29,15 @@ var Master;
 var OurVREffect;
 var OurVRControls;
 
-var OurOBJLoader = new THREE.OBJLoader();
-
 var VRMODE = 0;
 
 var video;
 var videoTexture;
 var videoImageContext;
 
-//temp
-var BBSRC_Logo;
-var Ourface;
+stage = new NGL.Stage();
+
+//get rid of the distortion already
 
 //We have a "protein of interest" that the non-VR folks are looking at. When the VRer picks up a new one, their focus snaps to that
 
@@ -75,7 +73,7 @@ var Ourface;
 
 /*
  * there should be a texture with the link of the page on it.
- * You should try and get a super short url, then think of an acronym to go with it. 
+ * You should try and get a super short url, then think of an acronym to go with it.
  * If it involves a B or M can turn it to biomolecule
  */
 

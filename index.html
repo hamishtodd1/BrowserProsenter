@@ -41,13 +41,38 @@
 
 		<script src="/socket.io/socket.io.js"></script>
 		
+		<script src="Dependencies/ngl.js"></script>
+		
 		<script src="Dependencies/three.min.js"></script>
 		<script src="Dependencies/PDBLoader.js"></script>
 		<script src="Dependencies/MTLLoader.js"></script>
 		<script src="Dependencies/OBJLoader.js"></script>
 		<script src="Dependencies/SceneFromDemo.js"></script>
 		
-		<!--<script src="Dependencies/ngl.full.min.js"></script>-->
+		
+		
+		<script>
+
+				/*var stage;
+				document.addEventListener( "DOMContentLoaded", function(){
+						stage = new NGL.Stage("viewport");
+						
+						var xhr = new XMLHttpRequest();
+						xhr.open( "GET", "http://mmtf.rcsb.org/v0.2/full/3sn6", true );
+						xhr.addEventListener( 'load', function( event ){
+								var blob = new Blob( [ xhr.response ], { type: 'application/octet-binary'} );
+								
+								stage.loadFile( blob, {
+										ext: "mmtf", defaultRepresentation: true
+								} ).then( function( o ){
+										o.addRepresentation( "contact" );
+								} );
+						} );
+						xhr.responseType = "arraybuffer";
+						xhr.send( null );
+				} );*/
+
+		</script>
 		
 		<script src="Dependencies/WebVR.js"></script>
 		<script src="Dependencies/VREffect.js"></script>

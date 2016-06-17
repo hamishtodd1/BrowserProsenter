@@ -6,8 +6,6 @@ function Download_initial_stuff(PreInitChecklist) {
 	var OurLoadedThingsLinks = Array();
 	OurLoadedThingsLinks[0] = "http://hamishtodd1.github.io/BrowserProsenter/Data/vr_controller_vive_1_5.obj";
 	OurLoadedThingsLinks[1] = "gentilis.js";
-	OurLoadedThingsLinks[2] = "http://hamishtodd1.github.io/BrowserProsenter/Data/Hello.png";
-	OurLoadedThingsLinks[3] = "http://hamishtodd1.github.io/BrowserProsenter/Data/face.png";
 //	OurLoadedThingsLinks[1] = testproteinlink;
 	
 	var OurLoadedThings = Array(OurLoadedThingsLinks.length);
@@ -113,6 +111,8 @@ function Loadpdb_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklis
 }
 function Loadobj_initially(linkstring,ThisIndex,OurLoadedThings, PreInitChecklist)
 {
+	var OurOBJLoader = new THREE.OBJLoader();
+	
 	OurOBJLoader.load(linkstring,
 		function ( object ) {
 			OurLoadedThings[ThisIndex] = object;

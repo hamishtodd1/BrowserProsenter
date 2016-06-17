@@ -26,10 +26,6 @@ function UpdateHands(Models,Users)
 				}
 			}
 			
-			if(Users[i].Controller.position.distanceTo(BBSRC_Logo.position) < 0.1)
-				AttemptPickup(Users[i].Controller, BBSRC_Logo);
-			
-			
 			//i > 0 because it's hard to think of a situation in which you want to hold your own camera
 			//note that no camera other than our own is picked up. The models are just that - models
 			if( !VRMODE && i > 0 && Users[i].Controller.position.distanceTo( Camera.position ) < 0.2 )

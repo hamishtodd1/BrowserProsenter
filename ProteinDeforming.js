@@ -1,4 +1,6 @@
 /*
+ * Should probably change representation. A trace, with basic representation of sidechains sticking out
+ * 
  * FUCK IT THEY CAN ONLY GRAB THEM IF THEY'RE CLOSE
  * 
  * The situation is: the player has grabbed AA1 and AA2, potentially very far apart

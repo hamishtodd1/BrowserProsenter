@@ -7,11 +7,12 @@ var MasterID = "none";
 
 app.use(express.static(__dirname ));
 
-//No idea what these things are. Just sends the damn page. 
+//Just sends the damn files, then others are brought in?
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/index.html');
 });
 
+//also sometimes the Master doesn't seem to disconnect when you close the page
 //pretty freaking crazy: as soon as user's address bar autocompletes to the address, apparently that's a connection?
 //that is a problem because they register as separate connections but one of them DOESN'T DISCONNECT RAAAARGH
 io.on('connection', function(socket){

@@ -122,10 +122,10 @@ function User(Gripping, ID, ControllerModel,
 			this.CameraObject.children[2].geometry.vertices[i].applyAxisAngle(Central_X_axis, -TAU / 4);
 		}
 		
-		if(newUserColorComponent === 0)
-			this.CameraObject.add(Ourface)
-		Ourface.scale.set(30,30,30);
-		Ourface.position.z = -10;
+//		if(newUserColorComponent === 0)
+//			this.CameraObject.add(Ourface)
+//		Ourface.scale.set(30,30,30);
+//		Ourface.position.z = -10;
 		
 		this.CameraObject.scale.set(0.006,0.006,0.006);
 	}
@@ -177,34 +177,34 @@ function GetInput()
 				{
 					var gamepads = navigator.getGamepads();
 					
-					for(var i = 0; i < gamepads.length; ++i)
+					for(var k = 0; k < gamepads.length; ++k)
 					{					
-						if (gamepads[i] && gamepads[i].pose) //because some are undefined
+						if (gamepads[k] && gamepads[k].pose) //because some are undefined
 						{
-							console.log(gamepads[i].pose.orientation);
+							console.log(gamepads[k].pose.orientation);
 							
-							this.Controller.position.x = gamepads[i].pose.position[0];
-							this.Controller.position.y = gamepads[i].pose.position[1];
-							this.Controller.position.z = gamepads[i].pose.position[2];
+							this.Controller.position.x = gamepads[k].pose.position[0];
+							this.Controller.position.y = gamepads[k].pose.position[1];
+							this.Controller.position.z = gamepads[k].pose.position[2];
 							
 							//pretty hacky solution to relative position problem
 							this.Controller.position.add(INITIAL_CAMERA_POSITION);
 							
-							this.Controller.quaternion.x = gamepads[i].pose.orientation[0];
-							this.Controller.quaternion.y = gamepads[i].pose.orientation[1];
-							this.Controller.quaternion.z = gamepads[i].pose.orientation[2];
-							this.Controller.quaternion.w = gamepads[i].pose.orientation[3];
+							this.Controller.quaternion.x = gamepads[k].pose.orientation[0];
+							this.Controller.quaternion.y = gamepads[k].pose.orientation[1];
+							this.Controller.quaternion.z = gamepads[k].pose.orientation[2];
+							this.Controller.quaternion.w = gamepads[k].pose.orientation[3];
 						      
 							//a very primitive way to work out grippingness. If any button on any gamepad is pushed.
-							for (var j = 0; j < gamepads[i].buttons.length; ++j)
+							for (var j = 0; j < gamepads[k].buttons.length; ++j)
 							{
-								if (gamepads[i].buttons[j].pressed)
+								if (gamepads[k].buttons[j].pressed)
 								{
 									this.Gripping = 1;
 									break;
 								}
 								
-								if( j === gamepads[i].buttons.length - 1)
+								if( j === gamepads[k].buttons.length - 1)
 									this.Gripping = 0;
 							}
 							
