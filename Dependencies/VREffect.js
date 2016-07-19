@@ -179,7 +179,7 @@ THREE.VREffect = function ( renderer, onError ) {
 
 			var eyeParamsL = vrHMD.getEyeParameters( 'left' );
 			var eyeParamsR = vrHMD.getEyeParameters( 'right' );
-
+			
 			if ( !deprecatedAPI ) {
 
 				eyeTranslationL.fromArray( eyeParamsL.offset );
@@ -195,6 +195,17 @@ THREE.VREffect = function ( renderer, onError ) {
 				eyeFOVR = eyeParamsR.recommendedFieldOfView;
 
 			}
+
+//			var hackfactor = 0.99;
+//			eyeFOVL.upDegrees *= hackfactor;
+//			eyeFOVL.downDegrees *= hackfactor;
+//			eyeFOVL.rightDegrees *= hackfactor;
+//			eyeFOVL.leftDegrees *= hackfactor;
+//			
+//			eyeFOVR.upDegrees *= hackfactor;
+//			eyeFOVR.downDegrees *= hackfactor;
+//			eyeFOVR.rightDegrees *= hackfactor;
+//			eyeFOVR.leftDegrees *= hackfactor;
 
 			if ( Array.isArray( scene ) ) {
 
