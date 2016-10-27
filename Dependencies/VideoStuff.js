@@ -2,7 +2,7 @@ function initVideo()
 {	
 	// create the video element
 	video = document.createElement( 'video' );
-	video.src = "http://hamishtodd1.github.io/BrowserProsenter/Data/hepatitis pics/vid.ogv";
+	video.src = "http://hamishtodd1.github.io/SphericalVideoOutreachGenerator/Data/vid.ogv";
 	video.crossOrigin = "anonymous";
 	
 	video.id = 'video';
