@@ -2,9 +2,13 @@ function initVideo()
 {	
 	// create the video element
 	video = document.createElement( 'video' );
-	// video.id = 'video';
-	// video.type = ' video/ogg; codecs="theora, vorbis" ';
-	video.src = "sintel.ogv"; //http://hamishtodd1.github.io/
+	video.src = "http://hamishtodd1.github.io/BrowserProsenter/Data/hepatitis pics/vid.ogv";
+	video.crossOrigin = "anonymous";
+	
+	video.id = 'video';
+	video.type = 'video/ogg; codecs="theora, vorbis" ';
+//	video.loop = true;
+	
 	video.load(); // must call after setting/changing source
 	video.play();
 	
@@ -17,8 +21,8 @@ function initVideo()
 	// video = document.getElementById( 'myVideo' );
 	
 	var videoImage = document.createElement( 'canvas' );
-	videoImage.width = 720;
-	videoImage.height = 306;
+	videoImage.width = 1920 / 3;
+	videoImage.height = 960 / 3;
 
 	videoImageContext = videoImage.getContext( '2d' );
 	// background color if no video present
@@ -32,9 +36,10 @@ function initVideo()
 	var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, overdraw: true, side:THREE.DoubleSide } );
 	// the geometry on which the movie will be displayed;
 	// 		movie image will be scaled to fit these dimensions.
-	var movieGeometry = new THREE.PlaneGeometry( 12,5,4, 4 );
-	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
+//	var movieScreen = new THREE.Mesh( new THREE.PlaneGeometry( 1.6 * 0.8,0.9 * 0.8,4, 4 ), movieMaterial );
+	movieScreen = new THREE.Mesh( new THREE.SphereGeometry( 25, 50,50 ), movieMaterial );
 	movieScreen.position.set(0,0,0);
+	movieScreen.rotation.y = TAU / 4 * 2;
 	Scene.add(movieScreen);
 }
 

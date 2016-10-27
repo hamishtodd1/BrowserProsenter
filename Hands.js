@@ -19,8 +19,14 @@ function UpdateHands(Models,Users)
 		{			
 			for(var j = 0; j < Models.length; j++)
 			{
-				if( point_in_BoxHelper(Users[i].Controller.position,
-						Models[j].children[0].BoundingBoxAppearance.geometry.attributes.position.array) )
+				if(j === 2)
+				{
+					if( Users[i].Controller.position.distanceTo( Models[j].position ) < 0.2 )
+					{
+						AttemptPickup(Users[i].Controller, Models[j]);
+					}
+				}
+				else if( Users[i].Controller.position.distanceTo( Models[j].position ) < 0.05 )
 				{
 					AttemptPickup(Users[i].Controller, Models[j]);
 				}
@@ -31,7 +37,7 @@ function UpdateHands(Models,Users)
 			if( !VRMODE && i > 0 && Users[i].Controller.position.distanceTo( Camera.position ) < 0.2 )
 			{
 				//TODO iff you're not receiving input from a head tracker
-				AttemptPickup(Users[i].Controller, Camera);
+//				AttemptPickup(Users[i].Controller, Camera);
 				//don't be surprised if this causes the camera to turn 45 degrees, you just have work to do
 				//there is a good argument for allowing you multiple things in your hands, what if there's many cameras?
 			}

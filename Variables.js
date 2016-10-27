@@ -14,8 +14,7 @@ var delta_t = 0;
 var logged = 0;
 var debugging = 0;
 
-//Static. At least in some sense.
-var socket = io();
+THREE.TextureLoader.prototype.crossOrigin = '';
 
 var gentilis;
 
